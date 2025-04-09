@@ -1,0 +1,22 @@
+# LangChain integrations
+langchain-groq
+langchain-openai
+
+# CrewAI
+crewai
+
+# For loading environment variables
+python-dotenv
+
+# For PDF parsing (PyMuPDF)
+PyMuPDF
+
+# Standard libraries like typing, os, re, json, uuid, time are part of Python's standard library
+
+# If you're using a specific Python version (optional but good practice)
+# python_version == "3.10"
+
+transformers
+sentence-transformers
+torch
+spacy
