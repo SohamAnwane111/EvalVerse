@@ -8,22 +8,6 @@ import json
 import uuid
 import time
 
-
-# def extract_first_json_safe(text):
-#     """Extracts and returns the first valid JSON object from the string."""
-#     try:
-#         text = text.strip().strip("`")
-#         for candidate in re.findall(r'\{.*?\}', text, re.DOTALL):
-#             try:
-#                 return json.loads(candidate)
-#             except json.JSONDecodeError:
-#                 continue
-#     except Exception as e:
-#         print("❌ JSON Extraction Failed:", e)
-#     print("❌ No valid JSON object found.")
-#     return None
-
-
 def get_question(skills, difficulty_levels, seen_questions):
     """Handles question generation with retry logic and security filter."""
     question_agent = QuestionGenerator()

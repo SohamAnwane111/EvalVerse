@@ -2,15 +2,15 @@ from Engine.driver import LLM_Driver, LLM_Agent
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv('application.env')
 
-API_KEY = os.getenv("GROQ_API_KEY")
-BASE_URL = os.getenv("GROQ_API_URL")
-MODEL = os.getenv("GROQ_MODEL")
-MAX_TOKENS = os.getenv("GROQ_MAX_TOKENS", 1000)
+API_KEY = os.environ.get("groq.api.key2")
+BASE_URL = os.environ.get("groq.api.url")
+MODEL = os.environ.get("groq.model2")
+MAX_TOKENS = int(os.environ.get("groq.max_tokens", 1000))
 
 
-@LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
+@LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS, use_chatlite=True)
 class Evaluator:
 
     @LLM_Agent("evaluator")

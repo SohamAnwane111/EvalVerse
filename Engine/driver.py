@@ -2,6 +2,7 @@ from typing import Dict, Callable
 import types
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
+from langchain_community.chat_models import ChatLiteLLM
 from crewai import Agent, Task, Crew
 
 # ================================================================
@@ -12,47 +13,51 @@ class _LLM_AgentRegistry:
 
     @staticmethod
     def register(name: str):
-        """
-        Decorator to register a method as a named agent module.
-        """
         def decorator(func):
             _LLM_AgentRegistry._registry[name] = func
             return func
         return decorator
 
-
-# Exported alias for decorator usage
 LLM_Agent = _LLM_AgentRegistry.register
 
 # ================================================================
 # Main Driver Decorator
 # ================================================================
-def LLM_Driver(base_url, api_key, model_name, temperature=0.1, max_tokens=1000):
+def LLM_Driver(base_url, api_key, model_name, temperature=0.1, max_tokens=1000, use_chatlite=False):
     """
-    Class decorator that wires up LLM-powered agent/task creation.
-    Supports dynamic inputs via keyword arguments passed to the description function.
+    Decorator that sets up LLM-powered agents using LangChain + CrewAI.
+    Supports OpenAI, Groq, and ChatLite — explicitly use `use_chatlite=True` to route via ChatLite.
     """
 
     def decorator(cls):
-        # Store LLM configuration
+        if(model_name == None):
+            print("Model name is not set. Please set the model name.")
         cls._llm_config = {
             'base_url': base_url,
             'api_key': api_key,
             'model_name': model_name,
             'temperature': temperature,
-            'max_tokens': max_tokens
+            'max_tokens': max_tokens,
+            'use_chatlite': use_chatlite 
         }
 
         cls._agents = {}
         cls._task_templates = {}
 
-        # Register agents using stored configs
         for agent_name, method in _LLM_AgentRegistry._registry.items():
 
             def create_agent_template(method=method, name=agent_name):
                 config = method(cls)
 
-                llm_cls = ChatGroq if model_name.startswith("groq") else ChatOpenAI
+                # ✨ Pick LLM class based on flag
+                if use_chatlite:
+                    llm_cls = ChatLiteLLM
+                elif model_name.startswith("groq"):
+                    llm_cls = ChatGroq
+                else:
+                    llm_cls = ChatOpenAI
+
+                # 🔌 LLM instance
                 llm = llm_cls(
                     base_url=base_url,
                     api_key=api_key,
@@ -61,6 +66,7 @@ def LLM_Driver(base_url, api_key, model_name, temperature=0.1, max_tokens=1000):
                     max_tokens=max_tokens
                 )
 
+                # 👷 Agent setup
                 agent = Agent(
                     role=config["role"],
                     goal=config["goal"],
@@ -100,10 +106,23 @@ def LLM_Driver(base_url, api_key, model_name, temperature=0.1, max_tokens=1000):
         cls.run = run
 
         def run_all(self):
-            raise NotImplementedError("run_all not supported with dynamic inputs.")
+            results = {}
+            for agent_name in self._agents:
+                run_method = getattr(self, f'run_{agent_name}', None)
+                if callable(run_method):
+                    print(f"\n🚀 Running agent '{agent_name}'...")
+                    try:
+                        result = run_method()
+                        results[agent_name] = result
+                    except Exception as e:
+                        results[agent_name] = f"❌ Failed: {e}"
+                else:
+                    results[agent_name] = "❌ No runner method found"
+            return results
 
         cls.run_all = run_all
 
+        # Inject `run_<agent>` methods
         original_init = cls.__init__ if hasattr(cls, '__init__') else lambda self: None
 
         def __init__(self, *args, **kwargs):

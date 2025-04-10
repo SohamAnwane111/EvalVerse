@@ -4,12 +4,12 @@ from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 import os
 import uuid
 
-load_dotenv()
+load_dotenv('application.env')
 
-API_KEY = os.getenv("GROQ_API_KEY")
-BASE_URL = os.getenv("GROQ_API_URL")
-MODEL = os.getenv("GROQ_MODEL")
-MAX_TOKENS = os.getenv("GROQ_MAX_TOKENS", 1000)
+API_KEY = os.environ.get("groq.api.key3")
+BASE_URL = os.environ.get("groq.api.url")
+MODEL = os.environ.get("groq.model3")
+MAX_TOKENS = int(os.environ.get("groq.max_tokens", 1000))
 
 
 def filtered_tool(tool_instance, top_n_chars=100):
@@ -21,7 +21,7 @@ def filtered_tool(tool_instance, top_n_chars=100):
     return FilteredTool()
 
 
-@LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
+@LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS, use_chatlite=True)
 class QuestionGenerator:
 
     @LLM_Agent("question_generator")

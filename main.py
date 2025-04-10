@@ -16,46 +16,42 @@ def main():
     print("🔍 Skills Extracted:")
     skills = resume_analyzer.run("skill_extractor", resume_text=resume_text)
     print(skills)
-    time.sleep(20)
+    time.sleep(10)
 
 
     print("\n🧑‍💼 Experience Extracted:")
     experience = resume_analyzer.run("experience_extractor", resume_text=resume_text)
     print(experience)
 
-    time.sleep(20)
 
-    personal_info = str2json.extract_first_json_safe(str(resume_analyzer.run("personal_info_extractor", resume_text=resume_text)))
-    print("\n👤 Personal Info Extracted:", personal_info)
+    # === Step 2: Run OA Simulation ===
+    difficulty = ["very easy", "easy", "medium", "hard", "very hard"]
+    points = [100, 200, 300, 400, 500]
+    rounds = 5
+    time.sleep(5)
+    run_oa_session(skills, difficulty, points, rounds)
 
-    # # === Step 2: Run OA Simulation ===
-    # difficulty = ["very easy", "easy", "medium", "hard", "very hard"]
-    # points = [100, 200, 300, 400, 500]
-    # rounds = 5
-    # time.sleep(5)
-    # run_oa_session(skills, difficulty, points, rounds)
+    # Time so that rate limit is not hit
+    time.sleep(10)
 
-    # # Time so that rate limit is not hit
-    # time.sleep(10)
+    # === Step 3: Extract and Analyze Job Requirements ===
+    job_requirement_extractor = TextExtractor("Job_Requirements.pdf")
+    job_requirement_text = str(job_requirement_extractor)
 
-    # # === Step 3: Extract and Analyze Job Requirements ===
-    # job_requirement_extractor = TextExtractor("Job_Requirements.pdf")
-    # job_requirement_text = str(job_requirement_extractor)
+    job_requirement_analyzer = JobRequirementAnalyzer()
+    print("\n📄 Job Requirements Extracted:")
+    clean_job_requirement = job_requirement_analyzer.run("job_req_extractor", noisy_job_desc=job_requirement_text)
+    print(clean_job_requirement)
 
-    # job_requirement_analyzer = JobRequirementAnalyzer()
-    # print("\n📄 Job Requirements Extracted:")
-    # clean_job_requirement = job_requirement_analyzer.run("job_req_extractor", noisy_job_desc=job_requirement_text)
-    # print(clean_job_requirement)
-
-    # # === Step 4: Evaluate Candidature ===
-    # print("\n📊 Candidature Evaluation:")
-    # candidature_analyzer = CandidatureAnalyzer()
-    # evaluation = candidature_analyzer.run(
-    #     "candidature_evaluator",
-    #     resume_text=resume_text,
-    #     job_req_text=clean_job_requirement
-    # )
-    # print(evaluation)
+    # === Step 4: Evaluate Candidature ===
+    print("\n📊 Candidature Evaluation:")
+    candidature_analyzer = CandidatureAnalyzer()
+    evaluation = candidature_analyzer.run(
+        "candidature_evaluator",
+        resume_text=resume_text,
+        job_req_text=clean_job_requirement
+    )
+    print(evaluation)
 
 if __name__ == "__main__":
     main()
