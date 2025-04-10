@@ -1,4 +1,4 @@
-from Engine.driver import llm_driver, llm_agent
+from Engine.driver import LLM_Agent, LLM_Driver
 from dotenv import load_dotenv
 import os
 
@@ -10,10 +10,10 @@ MODEL = os.getenv("GROQ_MODEL")
 MAX_TOKENS = os.getenv("GROQ_MAX_TOKENS", 100)
 
 
-@llm_driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
+@LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
 class ResumeAnalyzer:
 
-    @llm_agent.register_module("skill_extractor")
+    @LLM_Agent("skill_extractor")
     def create_skill_extractor(self):
         return {
             "role": "Resume Skill Extractor",
@@ -30,7 +30,7 @@ class ResumeAnalyzer:
             "tools": []
         }
 
-    @llm_agent.register_module("experience_extractor")
+    @LLM_Agent("experience_extractor")
     def create_experience_extractor(self):
         return {
             "role": "Resume Experience Extractor",

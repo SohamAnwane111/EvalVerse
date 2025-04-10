@@ -1,4 +1,4 @@
-from Engine.driver import llm_driver, llm_agent
+from Engine.driver import LLM_Driver, LLM_Agent
 from dotenv import load_dotenv
 import os
 import uuid
@@ -11,10 +11,10 @@ MODEL = os.getenv("GROQ_MODEL")
 MAX_TOKENS = os.getenv("GROQ_MAX_TOKENS", 1000)
 
 
-@llm_driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
+@LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
 class QuestionGenerator:
 
-    @llm_agent.register_module("question_generator")
+    @LLM_Agent("question_generator")
     def create_question_generator(self):
         return {
             "role": "Dynamic Question Generator",

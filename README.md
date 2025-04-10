@@ -42,7 +42,74 @@ EvalVerse/
     &nbsp;&nbsp;&nbsp;
 
 
+
+## 🚀 Major Improvements
+
+### 1. `@LLM_Driver` Decorator Enhancements
+
+- Introduced support for both **ChatGroq** and **ChatOpenAI** dynamically.
+- Automatically creates agent instances and registers `run_{agent_name}` methods.
+- Added support for agent-specific `description()` functions for dynamic task creation.
+
 ---
+
+### 2. Agent Registration via `@LLM_Agent`
+
+- Modular agent definitions via decorated functions.
+- Each agent can now define:
+  - `role`
+  - `goal`
+  - `backstory`
+  - `tools`
+  - `expected_output`
+  - `description` lambda for dynamic prompts
+
+
+## 🔐 Security Layer Additions
+
+### 1. ContentFilter
+
+- Scans output for banned words from a `.sys_dump.key` pickle file.
+- Supports:
+  - Custom extra words
+  - Runtime decorators
+  - Fallback return value
+- Print logs added:
+  - `✅ Passed` / `🚫 Blocked` messages for clarity
+
+---
+
+### 2. ToxicityFilter
+
+- Based on `unitary/toxic-bert` or a custom model (e.g., `facebook/roberta-hate-speech-dynabench-r1-target`)
+- Supports:
+  - Dynamic threshold for toxicity (default: 0.5)
+  - `guard` decorator with fallback
+  - Single text or list filtering
+- Print logs added with emoji-based clarity
+
+---
+
+### 3. ContextRelevanceFilter
+
+- Uses `all-MiniLM-L6-v2` for semantic similarity.
+- Allows checking if output is contextually relevant to a given input.
+- Supports threshold tuning (default: 0.5)
+
+---
+
+### 4. SecurityFilter Master Decorator
+
+- Unified interface wrapping Content, Toxicity, and Context filters.
+- Logs each stage of filtering with emoji headers.
+- On first run, prints **SECURITY FILTER** ASCII art banner.
+
+
+## 📦 Removed / Deprecated
+
+- ❌ Previous hardcoded agent-task definitions.
+- ❌ Static `run_all()` logic (now disabled for dynamic use-cases).
+- ❌ Tooling stubs and placeholder decorators replaced with functional runtime tools.
 
 ## 🤖 Core Components
 

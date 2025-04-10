@@ -1,4 +1,4 @@
-from Engine.driver import llm_driver, llm_agent
+from Engine.driver import LLM_Driver, LLM_Agent
 from dotenv import load_dotenv
 import os
 
@@ -10,10 +10,10 @@ MODEL = os.getenv("GROQ_MODEL")
 MAX_TOKENS = os.getenv("GROQ_MAX_TOKENS", 100)
 
 
-@llm_driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
+@LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS)
 class JobRequirementAnalyzer:
 
-    @llm_agent.register_module("job_req_extractor")
+    @LLM_Agent("job_req_extractor")
     def create_job_requirement_extractor(self):
         return {
             "role": "Job Requirement Extractor",
