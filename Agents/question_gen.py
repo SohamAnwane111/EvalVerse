@@ -1,14 +1,14 @@
 from Engine.driver import LLM_Driver, LLM_Agent
 from dotenv import load_dotenv
-from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 import os
 import uuid
+from Tools.web_searcher import WebSearcher
 
 load_dotenv('application.env')
 
-API_KEY = os.environ.get("groq.api.key3")
+API_KEY = os.environ.get("groq.api.key1")
 BASE_URL = os.environ.get("groq.api.url")
-MODEL = os.environ.get("groq.model3")
+MODEL = os.environ.get("groq.model1")
 MAX_TOKENS = int(os.environ.get("groq.max_tokens", 1000))
 
 
@@ -47,7 +47,7 @@ class QuestionGenerator:
                     f"  - 'options' (list of 4)\n"
                     f"  - 'correct_answer'"
                 ),
-                "tools": []
+                "tools": [WebSearcher()]
             }
         except Exception as e:
             print(f"[!] Web tools failed: {e}\n--> Fallback to no-tool generation")

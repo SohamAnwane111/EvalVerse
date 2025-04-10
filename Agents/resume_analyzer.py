@@ -4,9 +4,9 @@ import os
 
 load_dotenv('application.env')
 
-API_KEY = os.environ.get("groq.api.key1")
+API_KEY = os.environ.get("groq.api.key3")
 BASE_URL = os.environ.get("groq.api.url")
-MODEL = os.environ.get("groq.model1")
+MODEL = os.environ.get("groq.model3")
 MAX_TOKENS = int(os.environ.get("groq.max_tokens", 1000))
 
 

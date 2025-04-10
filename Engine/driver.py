@@ -4,6 +4,7 @@ from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from langchain_community.chat_models import ChatLiteLLM
 from crewai import Agent, Task, Crew
+from crewai_tools import SerperDevTool, ScrapeWebsiteTool
 
 # ================================================================
 # Agent Registration Decorator
@@ -75,6 +76,11 @@ def LLM_Driver(base_url, api_key, model_name, temperature=0.1, max_tokens=1000, 
                     verbose=True,
                     llm=llm
                 )
+
+                if config.get("tools"):
+                    print(f"📦 TOOLS ENABLED for '{name}': {[tool.__class__.__name__ for tool in config['tools']]}")
+                else:
+                    print(f"🚫 NO TOOLS attached for '{name}'")
                 cls._agents[name] = agent
 
                 cls._task_templates[name] = {
