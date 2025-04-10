@@ -47,7 +47,7 @@ class QuestionGenerator:
                     f"  - 'options' (list of 4)\n"
                     f"  - 'correct_answer'"
                 ),
-                "tools": [filtered_tool(SerperDevTool()), filtered_tool(ScrapeWebsiteTool())]
+                "tools": []
             }
         except Exception as e:
             print(f"[!] Web tools failed: {e}\n--> Fallback to no-tool generation")

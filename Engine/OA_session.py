@@ -1,6 +1,7 @@
 from Agents.question_gen import QuestionGenerator
 from Agents.question_eval import Evaluator
 from Security.security_filter import SecurityFilter
+from Engine import str2json
 
 import re
 import json
@@ -8,19 +9,19 @@ import uuid
 import time
 
 
-def extract_first_json_safe(text):
-    """Extracts and returns the first valid JSON object from the string."""
-    try:
-        text = text.strip().strip("`")
-        for candidate in re.findall(r'\{.*?\}', text, re.DOTALL):
-            try:
-                return json.loads(candidate)
-            except json.JSONDecodeError:
-                continue
-    except Exception as e:
-        print("❌ JSON Extraction Failed:", e)
-    print("❌ No valid JSON object found.")
-    return None
+# def extract_first_json_safe(text):
+#     """Extracts and returns the first valid JSON object from the string."""
+#     try:
+#         text = text.strip().strip("`")
+#         for candidate in re.findall(r'\{.*?\}', text, re.DOTALL):
+#             try:
+#                 return json.loads(candidate)
+#             except json.JSONDecodeError:
+#                 continue
+#     except Exception as e:
+#         print("❌ JSON Extraction Failed:", e)
+#     print("❌ No valid JSON object found.")
+#     return None
 
 
 def get_question(skills, difficulty_levels, seen_questions):
@@ -60,7 +61,7 @@ def run_oa_session(skills, difficulty_levels, points, rounds=5):
             print("⚠️ Question generation failed. Skipping.")
             continue
 
-        mcq_dict = extract_first_json_safe(str(mcq_response))
+        mcq_dict = str2json.extract_first_json_safe(str(mcq_response))
         if not mcq_dict:
             print("⚠️ Invalid MCQ format. Skipping.")
             continue
