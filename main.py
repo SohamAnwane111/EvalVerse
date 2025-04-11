@@ -1,57 +1,46 @@
 from Engine.text_extractor import TextExtractor
-from Agents.resume_analyzer import ResumeAnalyzer
-from Agents.job_req_analyzer import JobRequirementAnalyzer
-from Agents.candidature_agent import CandidatureAnalyzer
-from Engine.OA_session import run_oa_session
+from Agents.ResumeAnalyzer.candidate_profile_agent import CandidateProfileAgent
+from Agents.ResumeAnalyzer.skill_extractor_agent import SkillExtractorAgent
+from Agents.ResumeAnalyzer.work_experience_agent import WorkExperienceAgent
+import Engine.OA_session as OA
+import Engine.Interview as Interview
+from concurrent.futures import ThreadPoolExecutor
 from Engine import str2json
 import time
 
 def main():
-    # === Step 1: Extract Resume Text ===
+
     resume_extractor = TextExtractor("Resume.pdf")
     resume_text = str(resume_extractor)
 
-    resume_analyzer = ResumeAnalyzer()
+    profile_agent = CandidateProfileAgent()
+    skill_extractor = SkillExtractorAgent()
+    work_extraactor = WorkExperienceAgent()
 
-    print("🔍 Skills Extracted:")
-    skills = resume_analyzer.run("skill_extractor", resume_text=resume_text)
-    print(skills)
-    time.sleep(10)
+    # === Step 2: Run Agents Concurrently ===
+    with ThreadPoolExecutor() as executor:
+        future_profile = executor.submit(profile_agent.run, 'candidate_profile_agent', resume_text=resume_text)
+        future_skills = executor.submit(skill_extractor.run, 'skill_extractor', resume_text=resume_text)
+        future_experience = executor.submit(work_extraactor.run, 'experience_extractor', resume_text=resume_text)
 
+        extracted_profile = future_profile.result()
+        extracted_skills = future_skills.result()
+        extracted_experience = future_experience.result()
 
-    print("\n🧑‍💼 Experience Extracted:")
-    experience = resume_analyzer.run("experience_extractor", resume_text=resume_text)
-    print(experience)
+    print("\n🔍 Skills Extracted:", str(extracted_skills))
+    print("\n👤 Candidate Profile Extracted:"
+          f"\n{str2json.extract_first_json_safe(str(extracted_profile))}")
+    print("\n🧑‍💼 Experience Extracted:", str(extracted_experience))
 
-
-    # === Step 2: Run OA Simulation ===
     difficulty = ["very easy", "easy", "medium", "hard", "very hard"]
     points = [100, 200, 300, 400, 500]
-    rounds = 5
+    rounds = 2
     time.sleep(5)
-    run_oa_session(skills, difficulty, points, rounds)
+    OA.run_oa_session(str(extracted_skills), difficulty, points, rounds)
+    Interview.run_one_question_interview()
 
-    # Time so that rate limit is not hit
-    time.sleep(10)
 
-    # === Step 3: Extract and Analyze Job Requirements ===
-    job_requirement_extractor = TextExtractor("Job_Requirements.pdf")
-    job_requirement_text = str(job_requirement_extractor)
-
-    job_requirement_analyzer = JobRequirementAnalyzer()
-    print("\n📄 Job Requirements Extracted:")
-    clean_job_requirement = job_requirement_analyzer.run("job_req_extractor", noisy_job_desc=job_requirement_text)
-    print(clean_job_requirement)
-
-    # === Step 4: Evaluate Candidature ===
-    print("\n📊 Candidature Evaluation:")
-    candidature_analyzer = CandidatureAnalyzer()
-    evaluation = candidature_analyzer.run(
-        "candidature_evaluator",
-        resume_text=resume_text,
-        job_req_text=clean_job_requirement
-    )
-    print(evaluation)
+    
 
 if __name__ == "__main__":
     main()

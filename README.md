@@ -50,6 +50,7 @@ EvalVerse/
 - Introduced support for both **ChatGroq** and **ChatOpenAI** dynamically.
 - Automatically creates agent instances and registers `run_{agent_name}` methods.
 - Added support for agent-specific `description()` functions for dynamic task creation.
+- Dynamic LLM Routing: Choose between ChatGroq, ChatOpenAI, or ChatLiteLLM with a single decorator flag.
 
 ---
 
@@ -110,6 +111,14 @@ EvalVerse/
 - ❌ Previous hardcoded agent-task definitions.
 - ❌ Static `run_all()` logic (now disabled for dynamic use-cases).
 - ❌ Tooling stubs and placeholder decorators replaced with functional runtime tools.
+
+
+## Tools Added
+- Web Search tools integrated with Question Generator
+
+## Voice Input Added
+- Added feature to interview with voice as input process the text and output the result.
+
 
 ## 🤖 Core Components
 

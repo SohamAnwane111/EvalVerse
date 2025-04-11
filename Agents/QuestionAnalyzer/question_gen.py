@@ -1,25 +1,12 @@
-from Engine.driver import LLM_Driver, LLM_Agent
-from dotenv import load_dotenv
-import os
-import uuid
+from Engine.driver import LLM_Agent, LLM_Driver, load_config
 from Tools.web_searcher import WebSearcher
 
-load_dotenv('application.env')
+config = load_config('llm_config.yaml')
 
-API_KEY = os.environ.get("groq.api.key1")
-BASE_URL = os.environ.get("groq.api.url")
-MODEL = os.environ.get("groq.model1")
-MAX_TOKENS = int(os.environ.get("groq.max_tokens", 1000))
-
-
-def filtered_tool(tool_instance, top_n_chars=100):
-    class FilteredTool(tool_instance.__class__):
-        def run(self, *args, **kwargs):
-            result = super().run(*args, **kwargs)
-            # Only return top N characters or just extract summary if available
-            return result[:top_n_chars] if isinstance(result, str) else str(result)[:top_n_chars]
-    return FilteredTool()
-
+API_KEY=config['groq']['api']['key1']
+BASE_URL=config['groq']['url']
+MAX_TOKENS=config['groq']['max_tokens']
+MODEL=config['groq']['model']['gemma2-9b-it']
 
 @LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS, use_chatlite=True)
 class QuestionGenerator:

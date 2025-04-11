@@ -4,7 +4,7 @@ from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from langchain_community.chat_models import ChatLiteLLM
 from crewai import Agent, Task, Crew
-from crewai_tools import SerperDevTool, ScrapeWebsiteTool
+import yaml
 
 # ================================================================
 # Agent Registration Decorator
@@ -146,3 +146,20 @@ def LLM_Driver(base_url, api_key, model_name, temperature=0.1, max_tokens=1000, 
         return cls
 
     return decorator
+
+
+
+def load_config(path="llm_config.yaml"):
+    try:
+        with open(path, "r") as f:
+            config = yaml.safe_load(f)
+            if not isinstance(config, dict):
+                raise ValueError("YAML content is not a valid dictionary")
+            return config
+    except FileNotFoundError:
+        print(f"[ERROR] Config file '{path}' not found.")
+    except yaml.YAMLError as e:
+        print(f"[ERROR] YAML parsing error in '{path}': {e}")
+    except Exception as e:
+        print(f"[ERROR] Unexpected error while loading config: {e}")
+    return {} 

@@ -1,0 +1,28 @@
+groq:
+  api:
+    key1: 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
+    key2: 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
+    key3: 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
+    key4: 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
+    key5: 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  # reserved for voice to text transcription
+  url: https://api.groq.com/openai/v1
+  model:
+    gemma2-9b-it: groq/gemma2-9b-it
+    llama3-70b-8192: groq/llama3-70b-8192
+    llama-3.3-70b-versatile: groq/llama-3.3-70b-versatile
+    llama-3.1-8b-instant: groq/llama-3.1-8b-instant
+    deepseek-r1-distill-qwen-32b: groq/deepseek-r1-distill-qwen-32b
+    whisper-large-v3: groq/whisper-large-v3
+  temperature: 0.7
+  max_tokens: 1000
+
+serper:
+  api:
+    key: 98dd6ad0eeacfc40e0ef83d84f563a819c083d9a
+  url:
+    search: https://google.serper.dev/search
+    image: https://google.serper.dev/image
+    news: https://google.serper.dev/news
+    video: https://google.serper.dev/video
+    shopping: https://google.serper.dev/shopping
+  

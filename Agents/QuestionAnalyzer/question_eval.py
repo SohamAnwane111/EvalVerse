@@ -1,17 +1,15 @@
-from Engine.driver import LLM_Driver, LLM_Agent
-from dotenv import load_dotenv
-import os
+from Engine.driver import LLM_Agent, LLM_Driver, load_config
 
-load_dotenv('application.env')
+config = load_config('llm_config.yaml')
 
-API_KEY = os.environ.get("groq.api.key2")
-BASE_URL = os.environ.get("groq.api.url")
-MODEL = os.environ.get("groq.model2")
-MAX_TOKENS = int(os.environ.get("groq.max_tokens", 1000))
+API_KEY=config['groq']['api']['key3']
+BASE_URL=config['groq']['url']
+MAX_TOKENS=config['groq']['max_tokens']
+MODEL=config['groq']['model']['llama3-70b-8192']
 
 
 @LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS, use_chatlite=True)
-class Evaluator:
+class QuestionEvaluator:
 
     @LLM_Agent("evaluator")
     def create_evaluator(self):

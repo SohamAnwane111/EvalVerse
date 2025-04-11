@@ -1,10 +1,8 @@
-from Agents.question_gen import QuestionGenerator
-from Agents.question_eval import Evaluator
 from Security.security_filter import SecurityFilter
 from Engine import str2json
+from Agents.QuestionAnalyzer.question_gen import QuestionGenerator
+from Agents.QuestionAnalyzer.question_eval import QuestionEvaluator
 
-import re
-import json
 import uuid
 import time
 
@@ -32,7 +30,7 @@ def get_question(skills, difficulty_levels, seen_questions):
 
 
 def run_oa_session(skills, difficulty_levels, points, rounds=5):
-    evaluator = Evaluator()
+    evaluator = QuestionEvaluator()
     current_difficulty = 0
     seen_questions = set()
     points_scored = 0
@@ -64,6 +62,8 @@ def run_oa_session(skills, difficulty_levels, points, rounds=5):
 
             candidate_choice = input("\n🧠 Your Answer (a/b/c/d): ").strip().lower()
             option_index = ord(candidate_choice) - 97
+
+            time.sleep(5)
 
             if 0 <= option_index < len(mcq_dict["options"]):
                 candidate_answer = mcq_dict["options"][option_index]
