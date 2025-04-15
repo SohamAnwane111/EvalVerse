@@ -1,11 +1,10 @@
 from Engine.driver import LLM_Agent, LLM_Driver, load_config
 
 config = load_config('llm_config.yaml')
-
-API_KEY = config['openrouter']['api']['key1']
-BASE_URL = config['openrouter']['url']
-MAX_TOKENS = config['openrouter']['max_tokens']
-MODEL = config['openrouter']['model']['gemini-2.5-pro-exp-03-25:free']
+API_KEY=config['groq']['api']['key1']
+BASE_URL=config['groq']['url']
+MAX_TOKENS=config['groq']['max_tokens']
+MODEL=config['groq']['model']['llama-3.3-70b-versatile']
 
 @LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS, use_chatlite=True)
 class AtsScorer:
