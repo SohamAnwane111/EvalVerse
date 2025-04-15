@@ -49,7 +49,7 @@ def main():
     Interview.run_one_question_interview()
 
     # === Step 6: ATS Scoring ===
-    ats_score = ats.score_resume(resume_text, extracted_job)
+    ats_score = ats.run('ATS_scorer',resume_text=resume_text, job_description=extracted_job)
     print("\n📊 ATS Score:", ats_score)
 
 

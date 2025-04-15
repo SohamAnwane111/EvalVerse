@@ -18,7 +18,7 @@ groq:
 
 openrouter:
   api:
-    key1: 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
+    key1: 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
   url: https://openrouter.ai/api/v1
   model:
     deepseek/deepseek-r1:free: openrouter/deepseek/deepseek-r1:free
