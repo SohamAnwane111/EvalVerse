@@ -2,7 +2,7 @@ from Engine.driver import LLM_Agent, LLM_Driver, load_config
 from Tools.web_searcher import WebSearcher
 
 config = load_config('llm_config.yaml')
-API_KEY=config['groq']['api']['key4']
+API_KEY=config['groq']['api']['key5']
 BASE_URL=config['groq']['url']
 MAX_TOKENS=config['groq']['max_tokens']
 MODEL=config['groq']['model']['llama-3.3-70b-versatile']
