@@ -2,11 +2,10 @@ from Engine.driver import LLM_Agent, LLM_Driver, load_config
 from Tools.web_searcher import WebSearcher
 
 config = load_config('llm_config.yaml')
-
-API_KEY=config['openrouter']['api']['key1']
-BASE_URL=config['openrouter']['url']
-MAX_TOKENS=config['openrouter']['max_tokens']
-MODEL=config['openrouter']['model']['llama-3.3-70b-instruct']
+API_KEY=config['groq']['api']['key4']
+BASE_URL=config['groq']['url']
+MAX_TOKENS=config['groq']['max_tokens']
+MODEL=config['groq']['model']['deepseek-r1-distill-qwen-32b']
 
 @LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS, use_chatlite=True)
 class QuestionGenerator:
