@@ -3,3 +3,5 @@ venv/
 Dev/
 
 *.m4a
+
+llm_config.yaml

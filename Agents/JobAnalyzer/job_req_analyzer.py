@@ -1,13 +1,11 @@
-from Engine.driver import LLM_Driver, LLM_Agent
-from dotenv import load_dotenv
-import os
+from Engine.driver import LLM_Driver, LLM_Agent, load_config
+config = load_config('llm_config.yaml')
 
-load_dotenv('application.env')
+API_KEY=config['groq']['api']['key4']
+BASE_URL=config['groq']['url']
+MAX_TOKENS=config['groq']['max_tokens']
+MODEL=config['groq']['model']['llama-3.3-70b-versatile']
 
-API_KEY = os.environ.get("groq.api.key5")
-BASE_URL = os.environ.get("groq.api.url")
-MODEL = os.environ.get("groq.model5")
-MAX_TOKENS = int(os.environ.get("groq.max_tokens", 1000))
 
 @LLM_Driver(base_url=BASE_URL, api_key=API_KEY, model_name=MODEL, max_tokens=MAX_TOKENS, use_chatlite=True)
 class JobRequirementAnalyzer:

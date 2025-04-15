@@ -16,6 +16,17 @@ groq:
   temperature: 0.7
   max_tokens: 1000
 
+openrouter:
+  api:
+    key1: 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
+  url: https://openrouter.ai/api/v1
+  model:
+    deepseek/deepseek-r1:free: openrouter/deepseek/deepseek-r1:free
+    llama-3.3-70b-instruct: openrouter/meta-llama/llama-3.3-70b-instruct:free
+    gemini-2.5-pro-exp-03-25:free: openrouter/google/gemini-2.5-pro-exp-03-25:free
+    llama-3.1-nemotron-ultra-253b-v1:free: openrouter/nvidia/llama-3.1-nemotron-ultra-253b-v1:free
+  max_tokens: 1000
+
 serper:
   api:
     key: 98dd6ad0eeacfc40e0ef83d84f563a819c083d9a
